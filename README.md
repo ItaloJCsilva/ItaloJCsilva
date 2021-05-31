@@ -1,6 +1,7 @@
 - 👋 OI, meu nome é Italo josé cavalcante da silva.
-- 👀 Tenho interrese em programação.
-- 🌱 Estou estudando Analise e desenvolvimento de sistemas no IFPE-PAULISTA-PERNAMBUCO
+- Tenho interrese em programação.
+- Estou estudando Analise e desenvolvimento de sistemas no IFPE-PAULISTA-PERNAMBUCO
+- E-mail para contato ijcs@discente.ifpe.edu.br
 
 
 <!---
