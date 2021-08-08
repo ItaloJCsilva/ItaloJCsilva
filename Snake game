@@ -4,37 +4,64 @@ from sys import exit
 from random import randint
 
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load('sons/snake eater.mp3')
+pygame.mixer.music.play(-1)
+
+dead = pygame.mixer.Sound('sons/snake dead.wav')
+
+
+
 intro = True
+game = True
 largura = 900
 altura = 600
 
 x_cobra = int(largura/2) 
 y_cobra = int(altura/2)
 
-velocidade = 5
+velocidade = 6
 x_controle = velocidade
 y_controle = 0
 
 x_fruta = randint(40, 600)
 y_fruta = randint(50, 430)
 
+gravidade = 5
+
+x_pedra = randint(100, 800)
+y_pedra = 0
+
+
+
+
 pontos = 0
 fonte = pygame.font.SysFont('arial', 40, bold=True, italic=True)
 
 janela = pygame.display.set_mode((largura, altura))
 pygame.display.set_caption('Snake Game')
+tela = pygame.image.load('Sprites/grama.png')
+game_over= pygame.image.load('Sprites/go.jpg')
+game_over2 = pygame.transform.scale(game_over, (largura, altura))
+snake_1= pygame.image.load('Sprites/snake.png')
+snake_2= pygame.transform.scale(snake_1,(250,180))
 fps = pygame.time.Clock()
 
 lista_cobra=[]
 comprimento_inicial= 10
 morreu= False
 
+
 def aumenta_cobra(lista_cobra):
     for xey in lista_cobra:
         pygame.draw.rect(janela,(0,255,0),(xey[0],xey[1],20,20))
-    
+        
+
 def reiniciar_jogo():
-    global pontos, comprimento_inicial, x_cobra, y_cobra, lista_cobra, lista_cabeca, x_fruta, y_fruta, morreu
+    global pontos, comprimento_inicial, x_cobra, y_cobra, lista_cobra, lista_cabeca, x_fruta, y_fruta, morreu,velocidade
+    dead.stop()
+    velocidade = 6
+    pygame.mixer.music.play(-1)
     pontos = 0
     comprimento_inicial = 10
     x_cobra = int(largura/2) 
@@ -45,13 +72,46 @@ def reiniciar_jogo():
     y_fruta = randint(50, 430)
     morreu = False
 
+def fim_de_jogo1():
+
+    global fonte2,mensagem_gamer_over, texto_formatado2,ret_texto,morreu,velocidade 
+    velocidade = 6
+    fonte2=pygame.font.SysFont('Arial',30,True,True)
+    mensagem_gamer_over= 'Continua ? Aperte R'
+    texto_formatado2=fonte2.render(mensagem_gamer_over,True,(255,255,255))
+    ret_texto = texto_formatado.get_rect(center=(400,500))
+    morreu = True
+    pygame.mixer.music.stop()
+    dead.play()
+    
+def fim_dejogo_2():  
+    while morreu:
+        
+        janela.blit(game_over2,(0,0))
+        for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == KEYDOWN:
+                    if event.key == K_r:
+                        velocidade = 6
+                        
+                        reiniciar_jogo()
+            
+        janela.blit(texto_formatado2,ret_texto)
+        pygame.display.update()
+
 fonte3=pygame.font.SysFont('Arial',20,True,True)
+fonte4=pygame.font.SysFont('Arial',50,True,True)
 mensagem_game_intro= 'Aperte Espaço para começar. Para mover Aperte A/esquerda W/cima S/baixo D/direita'
+mensagem_game_intro1= 'Solid Snake'
 texto_formatado3=fonte3.render(mensagem_game_intro,True,(0,0,0))
 ret_texto2 = texto_formatado3.get_rect(center=(440,300))
+texto_formatado4=fonte4.render(mensagem_game_intro1,True,(0,0,0))
+ret_texto3 = texto_formatado4.get_rect(center=(440,100))
 
 while intro:
-            janela.fill((255,255,255))
+            janela.blit(tela,(0,0))
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -59,14 +119,15 @@ while intro:
                 if event.type == KEYDOWN:
                     if event.key == K_SPACE:
                         intro = False
-            
+            janela.blit(texto_formatado4,ret_texto3)
             janela.blit(texto_formatado3,ret_texto2)
             pygame.display.update()
 
 
-while True:
+while game:
     fps.tick(60)
-    janela.fill((255,255,255))
+    janela.blit(tela,(0,0))
+    
     
     mensagem = (f'Pontos: {pontos}')
     texto_formatado = fonte.render(mensagem, True, (0,0,0))
@@ -101,13 +162,22 @@ while True:
                     pass
                 else:
                     y_controle = +velocidade
-                    x_controle = 0
-                
+                    x_controle = 0     
+            
+    if game:
+        y_pedra = y_pedra + gravidade
+    if y_pedra > 600:
+        y_pedra = 0
+        x_pedra= randint(100,800)    
+    
     x_cobra = x_cobra + x_controle
     y_cobra = y_cobra + y_controle
-
     cobra = pygame.draw.rect(janela, (0,255,0), (x_cobra,y_cobra,20,20))
     fruta= pygame.draw.rect(janela, (255,0,0), (x_fruta,y_fruta,20,20))
+    pedra= pygame.draw.rect(janela, ('yellow'), (x_pedra,y_pedra,20,20))
+    
+    roleta = randint(1,4)
+    
     
     if cobra.colliderect(fruta):
         x_fruta = randint(40, 600)
@@ -121,42 +191,64 @@ while True:
     lista_cabeça.append(y_cobra)
     lista_cobra.append(lista_cabeça)
     
+    if cobra.colliderect(pedra):
+        x_pedra = randint(100, 800)
+        y_pedra = randint(-5, 0)
+        pontos += 1
+        comprimento_inicial += 10
+        if roleta ==1: 
+            comprimento_inicial = 10
+            x_cobra = int(largura/2) 
+            y_cobra = int(altura/2)
+            lista_cobra = []
+            lista_cabeca = []
+        if roleta ==2 :
+           pass 
+        if roleta ==3:
+            pass
+        if roleta ==4:
+            pass
+    
+       
     if lista_cobra.count(lista_cabeça) > 1:
-        fonte2=pygame.font.SysFont('Arial',30,True,True)
-        mensagem_gamer_over= 'Você Morreu Aperte R para começar novamente'
-        texto_formatado2=fonte2.render(mensagem_gamer_over,True,(0,0,0))
-        ret_texto = texto_formatado.get_rect(center=(180,300))
+        fim_de_jogo1()
+        fim_dejogo_2()
         
-        morreu = True
-        
-        while morreu:
-            janela.fill((255,255,255))
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    exit()
-                if event.type == KEYDOWN:
-                    if event.key == K_r:
-                        reiniciar_jogo()
-            
-            janela.blit(texto_formatado2,ret_texto)
-            pygame.display.update()
-    
     if x_cobra > largura:
-        x_cobra = 0
+        fim_de_jogo1()
+        fim_dejogo_2()
+        
     if x_cobra < 0:
-        x_cobra = largura
+        fim_de_jogo1()
+        fim_dejogo_2()
+        
     if y_cobra < 0:
-        y_cobra = altura
+        fim_de_jogo1()
+        fim_dejogo_2()
+        
     if y_cobra > altura:
-        y_cobra = 0
+        fim_de_jogo1()
+        fim_dejogo_2()
+              
     
-    if len(lista_cobra)> comprimento_inicial:
+    if pontos == 10:
+        janela.blit(snake_2,(600,400))
+    
+    if len(lista_cobra) > comprimento_inicial:
         del lista_cobra[0]
+    
     
     aumenta_cobra(lista_cobra)
         
     janela.blit(texto_formatado, (0,30))
 
-    
     pygame.display.update()
+
+
+
+
+
+
+
+
+
