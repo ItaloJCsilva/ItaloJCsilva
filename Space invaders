@@ -8,7 +8,6 @@ pygame.display.set_caption("Space atack")
 
 jogo=true
 while jogo:
-	
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			jogo=false
