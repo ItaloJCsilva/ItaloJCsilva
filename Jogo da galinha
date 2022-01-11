@@ -1,0 +1,244 @@
+import pygame
+from pygame.locals import*
+from sys import exit
+from random import randint
+
+pygame.init()
+intro = True
+jogo1 = True
+#posição da galinha
+xg=780 
+yg=300
+velocidadeG=5
+velocidadeC=15
+#posiição inicial dos carros
+xc1=60
+yc1=randint(800,2000)
+xc2=120
+yc2=randint(800,2000)
+xc3=240
+yc3=randint(800,2000)
+xc4=320
+yc4=randint(800,2000)
+xc5=450
+yc5=800
+xc6=550
+yc6=randint(850,2000)
+xc7=650
+yc7=randint(850,2000)
+xc8=730
+yc8=randint(850,2000)
+
+#janela
+Jlargura = 820
+Jaltura = 500
+
+Janela= pygame.display.set_mode((Jlargura,Jaltura))
+pygame.display.set_caption('Galinha')
+fps=pygame.time.Clock()
+
+#imgens
+imgfundo1 = pygame.image.load("img/rua1.png")
+imgfundo2 = pygame.image.load("img/rua2.png")
+imgfundo3 = pygame.image.load("img/rua3.png")
+imgfundo4 = pygame.image.load("img/rua4.png")
+imgfundo5 = pygame.image.load("img/rua5.png")
+imgfundo6 = pygame.image.load("img/rua6.png")
+imgfundo7 = pygame.image.load("img/rua7.png")
+imgfundo8 = pygame.image.load("img/rua8.png")
+imgfundo9 = pygame.image.load("img/rua9.png")
+imgfundo10 = pygame.image.load("img/rua10.png")
+imgfundo11 = pygame.image.load("img/rua11.png")
+imgfundo12 = pygame.image.load("img/rua12.png")
+
+galinha = pygame.image.load("galinha/g1.png")
+
+carro1= pygame.image.load('car/1.png')
+carro2= pygame.image.load('car/2.png')
+carro3= pygame.image.load('car/3.png')
+carro4= pygame.image.load('car/4.png')
+carro5= pygame.image.load('car/5.png')
+carro6= pygame.image.load('car/6.png')
+carro7= pygame.image.load('car/7.png')
+carro8= pygame.image.load('car/8.png')
+
+imgintro=pygame.image.load('img/intro.jpg')
+
+def fundo():
+    Janela.blit(imgfundo1,(0, 0))
+    Janela.blit(imgfundo2,(200, 0))
+    Janela.blit(imgfundo3,(400, 0))
+    Janela.blit(imgfundo4,(600, 0))
+    Janela.blit(imgfundo5,(0, 169))
+    Janela.blit(imgfundo6,(200, 169))
+    Janela.blit(imgfundo7,(400, 169))
+    Janela.blit(imgfundo8,(600, 169))
+    Janela.blit(imgfundo9,(0, 338))
+    Janela.blit(imgfundo10,(200, 338))
+    Janela.blit(imgfundo11,(400, 338))
+    Janela.blit(imgfundo12,(600, 338))
+def Galinha():
+    Janela.blit(galinha,(xg, yg))
+def Carro():
+    Janela.blit(carro1,(xc1, yc1))
+    Janela.blit(carro2,(xc2, yc2))
+    Janela.blit(carro3,(xc3, yc3))
+    Janela.blit(carro4,(xc4, yc4))
+    Janela.blit(carro5,(xc5, yc5))
+    Janela.blit(carro6,(xc6, yc6))
+    Janela.blit(carro7,(xc7, yc7))
+    Janela.blit(carro8,(xc8, yc8))
+def introimg():
+    Janela.blit(imgintro,(0,0))
+    
+fonte1=pygame.font.SysFont('Arial',20,True,True)
+mensagem_game_intro= 'Aperte Espaço para começar. Use as setas do teclado para se mover'
+texto_formatado1=fonte1.render(mensagem_game_intro,True,(255,0,0))
+ret_texto1 = texto_formatado1.get_rect(center=(440,300))
+while intro:
+            fps.tick(40)
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == KEYDOWN:
+                    if event.key == K_SPACE:
+                        intro = False
+            introimg()
+            Janela.blit(texto_formatado1,ret_texto1)
+            pygame.display.update() 
+def venceu():
+    global xg,yg
+                    
+    fonte2=pygame.font.SysFont('Arial',20,True,True)
+    mensagem_game_intro2= 'Voce venceu'
+    texto_formatado2=fonte2.render(mensagem_game_intro2,True,(255,0,0))
+    ret_texto2 = texto_formatado2.get_rect(center=(440,300))
+    jogo2=True
+    while jogo2:    
+        fps.tick(40)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == KEYDOWN:
+                if event.key == K_r:
+                    xg=780 
+                    yg=300
+                    jogo2=False
+                    
+                    
+        introimg()
+        Janela.blit(texto_formatado2,ret_texto2)
+        pygame.display.update()
+def perdeu():
+    global xg,yg
+    jogo3=True
+    fonte3=pygame.font.SysFont('Arial',20,True,True)
+    mensagem_game_intro3= 'Voce Perdeu'
+    texto_formatado3=fonte3.render(mensagem_game_intro3,True,(255,0,0))
+    ret_texto3 = texto_formatado3.get_rect(center=(440,300))
+    while jogo3:
+        fps.tick(40)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == KEYDOWN:
+                if event.key == K_r:
+                    xg=780 
+                    yg=300
+                    jogo3=False
+                       
+        introimg()
+        Janela.blit(texto_formatado3,ret_texto3)
+        pygame.display.update()   
+
+
+while jogo1:
+    fps.tick(40)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+    controles= pygame.key.get_pressed()
+    if controles[pygame.K_UP] and yg>=0 :
+        yg=yg-velocidadeG
+    if controles[pygame.K_DOWN] and yg<=440:
+        yg=yg+velocidadeG
+    if controles[pygame.K_LEFT]  and xg>=0:
+        xg=xg-velocidadeG
+    if controles[pygame.K_RIGHT]  and xg<=780:
+        xg=xg+velocidadeG
+    #retorno dos carros
+    #CARRO1
+    if yc1 <= -100:
+        yc1=randint(800,1000)
+    if yc2 <= -100:
+        yc2=randint(800,1200)
+    if yc3 <= -100:
+        yc3=randint(800,1400)
+    if yc4 <= -50:
+        yc4=randint(800,1600)
+    if yc5 <= -50:
+        yc5 =randint(800,1800)
+    if yc6 <= -50:
+        yc6 =randint(800,1800)
+    if yc7 <= -100:
+        yc7 =randint(800,1800)
+    if yc8 <= -150:
+        yc8 =randint(800,1800)
+
+        
+    yc1=yc1-velocidadeC
+    yc2=yc2-velocidadeC
+    yc3=yc3-velocidadeC
+    yc4=yc4-velocidadeC
+    yc5=yc5-velocidadeC
+    yc6=yc6-velocidadeC
+    yc7=yc7-velocidadeC
+    yc8=yc8-velocidadeC
+    
+    if xg <1:
+        venceu()
+    
+    
+    #colisao
+    
+    cgalinha=pygame.draw.rect(Janela,(255,0,0),(xg,yg,50,50))
+    ccar1=pygame.draw.rect(Janela,(255,0,0),(xc1,yc1,50,50))
+    ccar2=pygame.draw.rect(Janela,(255,0,0),(xc2,yc2,50,50))
+    ccar3=pygame.draw.rect(Janela,(255,0,0),(xc3,yc3,50,50))
+    ccar4=pygame.draw.rect(Janela,(255,0,0),(xc4,yc4,50,50))
+    ccar5=pygame.draw.rect(Janela,(255,0,0),(xc5,yc5,50,50))
+    ccar6=pygame.draw.rect(Janela,(255,0,0),(xc6,yc6,50,50))
+    ccar7=pygame.draw.rect(Janela,(255,0,0),(xc7,yc7,50,50))
+    ccar8=pygame.draw.rect(Janela,(255,0,0),(xc8,yc8,50,50))
+    if cgalinha.colliderect(ccar1):
+        perdeu()
+       
+    if cgalinha.colliderect(ccar2):
+       perdeu()
+        
+    if cgalinha.colliderect(ccar3):
+       perdeu() 
+    if cgalinha.colliderect(ccar4):
+        perdeu()
+    if cgalinha.colliderect(ccar5):
+        perdeu()
+    if cgalinha.colliderect(ccar6):
+        perdeu()
+    if cgalinha.colliderect(ccar7):
+        perdeu()
+    if cgalinha.colliderect(ccar8):
+        perdeu()  
+        
+    fundo()
+    Galinha()
+    Carro()
+    
+    pygame.display.update()
+
+
+
+
+
+
+
